@@ -64,7 +64,7 @@ def produce(weekly, items):
         "as_of": last.strftime("%Y-%m-%d"),
         "forecast_weeks": [w.strftime("%Y-%m-%d") for w in future],
         "recent_weeks": [w.strftime("%Y-%m-%d") for w in weeks[-RECENT:]],
-        "model": "ses(alpha=0.3) x 월별 계절지수 x 설·추석 연휴계수, 계수 추정 2021~2024, 1공장 화재 구간 제외",
+        "model": "ses(alpha=0.3) x 월별 계절지수 x 설·추석 연휴계수, 계수 추정 2021~2023, 1공장 화재 구간 제외",
         "season_index": {str(k): round(v, 3) for k, v in season.items()}, "holiday_factors": {k: round(v, 3) for k, v in hol.items()},
         "totals": {"recent_weeks": [w.strftime("%Y-%m-%d") for w in weeks[-RECENT:]], "recent": [float(x) for x in totals_recent],
                    "forecast": [float(np.sum([r["forecast"][h] for r in series_out])) for h in range(HORIZON)]},

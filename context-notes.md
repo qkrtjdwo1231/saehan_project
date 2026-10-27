@@ -94,6 +94,20 @@
 - git push 권한: `.claude/settings.local.json`에 Bash(git push:*) 허용 추가. 현재 세션에는 아직 반영 안 됨(재시작 또는 /hooks 필요). 로컬 커밋은 계속 쌓는 중.
 - 다음: (1) 연 단위 업계 지수·거래처 분기 매출을 예측에 곱하는 실험, (2) 4단계 웹 화면(표준 라이브러리 http.server + sqlite3 방식, 사용자 승인 대기 중).
 
+### 웹 구성 합의와 시연 준비 (같은 날 밤)
+- 웹은 깃+버셀+수파베이스. 계산은 파이썬(PC)에서, 수파베이스 표 6개(items, forecast_weekly, inventory, plan, plan_changes, industry), 버셀은 화면만. 화면 5개: 홈 / 수요 예측 / 주간 생산계획 / 가용재고 보드 / 변경 이력. 로그인은 시연 단계 생략(담당자 이름 선택). 사용자 판단으로 "업계·거래처 현황" 패널은 홈에서 제외 방향.
+- 사용자가 할 일: 수파베이스 프로젝트 생성(URL·anon·service_role), 버셀-GitHub 연결·저장소 가져오기, 저장소 공개 여부 확인. 내가 할 일: web/ Next.js 세팅(라이브러리 설치 승인 필요), 표 SQL, 업로드 스크립트, 환경변수 안내.
+- 실험 러너 `pipeline/forecast/runner.py` 48개 조건 백그라운드 실행 중 → `experiments/exp01_factors/index.csv`.
+- 시연용 질문·요청 문서 `시연_질문_요청_정리.txt` 작성(흐름, 확인 질문 6, 화면별 필요 정보, 요청 자료, 가져갈 것).
+
+### 4단계 웹 1차 완성 (같은 날 밤)
+- `web/` Next.js 15 + React 19 + supabase-js + recharts. 화면 5개 빌드 성공, 로컬(포트 3077)에서 배치→배포→수정→사유 모달→변경 이력→재고 생산예정 반영까지 실제 클릭으로 확인.
+- 데이터 계층 `web/lib/data.js`: 읽기는 supabase documents → 없으면 /data/*.json, 쓰기는 supabase → 없으면 localStorage. 수파베이스 anon key는 `.env`, `web/.env.local`(git 제외).
+- 수파베이스 표 5개 SQL `supabase/schema.sql` (RLS 끔, 시연용). 업로드 `pipeline/upload_supabase.py`. 아직 사용자가 SQL을 실행하지 않아 표 없음 → 화면은 로컬 JSON으로 동작 중.
+- 버셀: saehanproject.vercel.app 은 배포는 있으나 코드가 없어 NOT_FOUND. Root Directory=web, 환경변수 2개 설정 필요.
+- 실험 1 결과(`reports/06_experiments.md`): 최적 ses α0.3×계절×연휴, 계수 추정 2021~2023(A 4주합 0.554). 업계 지수 w는 효과 없음(짝 비교 0.554→0.556). produce.py TRAIN_YEARS를 2021~2023으로 변경 → 총량 예측 주당 2.51백만.
+- 참고 서비스 반영: 계획 격자는 Odoo MPS(품목×기간 격자), B유형 담당자 입력 우선은 Katana, 재고 소진일 색 표시는 Streamline에서 빌림. 변경 이력 화면은 우리 고유.
+
 ### 결정사항과 이유
 - 사용자 결정: 1순위 과제는 **출하예측 기반 생산계획 수립**. 적재 계산기·원자재 발주 시스템은 여기서 파생되는 부속 기능으로 본다.
 - 사용자 요구: 출하예측에 다른 변수도 반영, 계획 변경 이력·사유 관리가 쉬울 것, 실시간 가용재고 보드를 보기 편한 웹으로.

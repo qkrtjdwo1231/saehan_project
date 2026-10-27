@@ -8,7 +8,7 @@ a { color: inherit; text-decoration: none; }
 .nav { background: var(--navy); color: var(--white); padding: 0 24px; display: flex; align-items: center; gap: 24px; height: 56px; position: sticky; top: 0; z-index: 10; }
 .nav .brand { font-weight: 700; font-size: 17px; margin-right: 12px; display: flex; align-items: center; gap: 10px; }
 .nav .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--orange); display: inline-block; }
-.nav a.link { padding: 6px 10px; border-radius: 6px; opacity: .85; }
+.nav a.link { padding: 6px 10px; border-radius: 6px; opacity: .85; white-space: nowrap; }
 .nav a.link.active, .nav a.link:hover { background: rgba(255,255,255,.12); opacity: 1; }
 .nav .right { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; opacity: .9; }
 .nav select { background: var(--white); color: var(--navy-dark); border: none; border-radius: 6px; padding: 5px 8px; font-family: inherit; }
