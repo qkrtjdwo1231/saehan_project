@@ -12,3 +12,6 @@ data/
 # 파이썬
 __pycache__/
 *.pyc
+
+# 실험 원본 결과(용량 큼)
+experiments/*/*/backtest_*.csv

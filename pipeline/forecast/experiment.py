@@ -17,9 +17,9 @@ from pipeline.external.weather import weekly_temperature
 TRAIN_YEARS = [2021, 2022, 2023]  # 2024 하반기는 1공장 중단으로 총량이 왜곡되어 계수 추정에서 제외
 
 
-def factor_vectors(matrix, valid, weather_daily):
+def factor_vectors(matrix, valid, weather_daily, train_years=TRAIN_YEARS):
     weeks = pd.DatetimeIndex(matrix.columns)
-    train = [w for w in weeks if w.year in TRAIN_YEARS]
+    train = [w for w in weeks if w.year in train_years]
     totals = pd.Series(np.where(valid.to_numpy(), matrix.to_numpy(), 0).sum(axis=0), index=weeks)
     season = monthly_index(totals[train])
     season_vec = pd.Series([season[w.month] for w in weeks], index=weeks)
