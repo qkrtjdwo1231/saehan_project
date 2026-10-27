@@ -10,6 +10,7 @@ from pipeline.classify import demand_type
 from pipeline.forecast.backtest import walk_forward
 from pipeline.forecast.baselines import moving_average, seasonal_naive
 from pipeline.forecast.metrics import wape, hit_rate
+from pipeline.forecast.models import ses, tsb
 
 TEST_YEAR = 2025
 TYPE_YEAR = 2024
@@ -20,6 +21,23 @@ BASELINES = {
     "ma8": lambda history, h, valid: moving_average(history, valid),
     "snaive": lambda history, h, valid: seasonal_naive(history, h, valid),
 }
+MODELS = dict(BASELINES, **{
+    "ses": lambda history, h, valid: ses(history, h, valid),
+    "tsb": lambda history, h, valid: tsb(history, h, valid),
+})
+
+
+def levels(result):
+    """모델별로 네 집계 수준의 WAPE를 낸다. 계열×주·품종×주·총량은 1주 앞, 4주합은 h=1~4 합계."""
+    rows = []
+    for model, g in result.groupby("model"):
+        h1 = g[g["horizon"] == 1]
+        by_type = h1.assign(t=h1["series"].str.split("|").str[0]).groupby(["t", "target"])[["actual", "pred"]].sum()
+        total = h1.groupby("target")[["actual", "pred"]].sum()
+        four = g.groupby(["series", "origin"])[["actual", "pred"]].sum()
+        for level, d in [("계열×주", h1), ("품종×주", by_type), ("계열×4주합", four), ("총량", total)]:
+            rows.append({"model": model, "level": level, "wape": wape(d["actual"], d["pred"])})
+    return pd.DataFrame(rows)
 
 
 def series_matrix(weekly):
@@ -69,15 +87,22 @@ def run(processed_dir, models=BASELINES, label="baseline"):
     table = summarize(result, types)
     result.to_csv(os.path.join(processed_dir, f"backtest_{label}.csv"), index=False, encoding="utf-8-sig")
     table.to_csv(os.path.join(processed_dir, f"scores_{label}.csv"), index=False, encoding="utf-8-sig")
-    return table, types
+    levels(result).to_csv(os.path.join(processed_dir, f"levels_{label}.csv"), index=False, encoding="utf-8-sig")
+    return table, types, result
 
 
 if __name__ == "__main__":
     processed = sys.argv[1] if len(sys.argv) > 1 else os.path.join("data", "processed")
-    table, types = run(processed)
+    table, types, result = run(processed, MODELS, label="models")
     print("계열 수:", len(types), "| 2024년 기준 유형:", types.value_counts().to_dict())
     pd.set_option("display.width", 200)
+    print("\n=== 집계 수준별 WAPE ===")
+    print(levels(result).pivot(index="model", columns="level", values="wape").round(3).to_string())
     for t in ["전체", "A", "B", "C"]:
-        print(f"\n=== 수요유형 {t} ===")
+        print(f"\n=== 수요유형 {t} · 계열×주 WAPE (구간별) ===")
         print(table[table["demand_type"] == t].pivot(index="model", columns="horizon", values="wape").round(3).to_string())
         print("출고 유무 적중률 (h=1):", table[(table["demand_type"] == t) & (table["horizon"] == 1)].set_index("model")["hit_rate"].round(3).to_dict())
+    four = result.groupby(["model", "series", "origin"])[["actual", "pred"]].sum().reset_index()
+    four["demand_type"] = four["series"].map(types)
+    print("\n=== 수요유형별 계열×4주합 WAPE ===")
+    print(four.groupby(["model", "demand_type"]).apply(lambda g: wape(g["actual"], g["pred"]), include_groups=False).unstack().round(3).to_string())
