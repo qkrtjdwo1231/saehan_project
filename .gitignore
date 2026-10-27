@@ -22,3 +22,4 @@ web/.env*.local
 web/node_modules/
 web/.next/
 web/public/data/*.json
+experiments/*_stdout.log
