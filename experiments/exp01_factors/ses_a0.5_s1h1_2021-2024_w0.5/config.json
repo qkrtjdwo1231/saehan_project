@@ -1,0 +1,9 @@
+{
+  "id": "ses_a0.5_s1h1_2021-2024_w0.5",
+  "base": "ses",
+  "alpha": 0.5,
+  "season": true,
+  "holiday": true,
+  "factor_years": "2021-2024",
+  "industry_w": 0.5
+}

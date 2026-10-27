@@ -15,7 +15,7 @@ from pipeline.forecast.models import ses
 
 HORIZON = 4
 RECENT = 12
-TRAIN_YEARS = [2021, 2022, 2023, 2024]  # 사용자 결정: 계수 추정은 2021~2024
+TRAIN_YEARS = [2021, 2022, 2023]  # 계절·연휴 계수 추정 연도. 실험 1 결과 2021~2023이 최적(2024 하반기 화재 왜곡 제외). 학습 데이터 자체는 2021~2024 전체
 
 
 def _factors(matrix, valid, future_weeks):

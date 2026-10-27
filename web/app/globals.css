@@ -1,0 +1,71 @@
+/* 전체 화면 공통 스타일. 발표 자료와 같은 네이비·주황 톤, 맑은 고딕 */
+:root {
+  --navy: #1e3a5f; --navy-dark: #1f2a3c; --orange: #e07b2a; --gold: #f2b134; --gray: #7a8494; --bg: #eef2f7; --white: #ffffff; --red: #c9463d; --green: #2e8b57;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--navy-dark); font-family: "Malgun Gothic", "맑은 고딕", "Apple SD Gothic Neo", sans-serif; font-size: 15px; }
+a { color: inherit; text-decoration: none; }
+.nav { background: var(--navy); color: var(--white); padding: 0 24px; display: flex; align-items: center; gap: 24px; height: 56px; position: sticky; top: 0; z-index: 10; }
+.nav .brand { font-weight: 700; font-size: 17px; margin-right: 12px; display: flex; align-items: center; gap: 10px; }
+.nav .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--orange); display: inline-block; }
+.nav a.link { padding: 6px 10px; border-radius: 6px; opacity: .85; }
+.nav a.link.active, .nav a.link:hover { background: rgba(255,255,255,.12); opacity: 1; }
+.nav .right { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; opacity: .9; }
+.nav select { background: var(--white); color: var(--navy-dark); border: none; border-radius: 6px; padding: 5px 8px; font-family: inherit; }
+main { max-width: 1400px; margin: 0 auto; padding: 24px; }
+h1 { font-size: 24px; margin: 0 0 6px; color: var(--navy); }
+h2 { font-size: 17px; margin: 0 0 10px; color: var(--navy); }
+.sub { color: var(--gray); margin: 0 0 18px; font-size: 14px; }
+.grid { display: grid; gap: 16px; }
+.grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+.grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.card { background: var(--white); border-radius: 12px; padding: 18px 20px; box-shadow: 0 1px 2px rgba(31,42,60,.06); }
+.kpi .label { color: var(--gray); font-size: 13px; }
+.kpi .value { font-size: 30px; font-weight: 700; color: var(--navy); margin-top: 4px; }
+.kpi .value.orange { color: var(--orange); }
+.kpi .note { color: var(--gray); font-size: 12px; margin-top: 4px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; color: var(--gray); font-weight: 600; font-size: 12px; padding: 8px 8px; border-bottom: 1px solid #dfe5ee; white-space: nowrap; }
+td { padding: 8px 8px; border-bottom: 1px solid #eef2f7; vertical-align: middle; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+tr:hover td { background: #f7f9fc; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 700; color: var(--white); }
+.badge.A { background: var(--navy); } .badge.B { background: var(--orange); } .badge.C { background: var(--gray); }
+.muted { color: var(--gray); }
+.dim { color: #9aa3b2; }
+.bold { font-weight: 700; color: var(--navy); }
+.toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.toolbar input[type=text] { padding: 8px 10px; border: 1px solid #d5dbe5; border-radius: 8px; font-family: inherit; font-size: 14px; min-width: 240px; }
+.btn { padding: 7px 14px; border-radius: 8px; border: 1px solid #d5dbe5; background: var(--white); cursor: pointer; font-family: inherit; font-size: 14px; color: var(--navy-dark); }
+.btn.on { background: var(--navy); color: var(--white); border-color: var(--navy); }
+.btn.primary { background: var(--orange); color: var(--white); border-color: var(--orange); font-weight: 700; }
+.btn.small { padding: 4px 9px; font-size: 12px; }
+.btn:disabled { opacity: .5; cursor: default; }
+.notice { background: #fff6ec; border: 1px solid #f3d5b5; color: #7a4a14; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 14px; }
+.notice.blue { background: #eef4fb; border-color: #c9d8ea; color: var(--navy); }
+.status-pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.status-pill.ok { background: #e6f4ec; color: var(--green); } .status-pill.warn { background: #fff3e0; color: #b35f10; } .status-pill.bad { background: #fdecea; color: var(--red); } .status-pill.none { background: #eef2f7; color: var(--gray); }
+input.cell-input { width: 90px; padding: 5px 7px; border: 1px solid #d5dbe5; border-radius: 6px; font-family: inherit; text-align: right; }
+.plan-layout { display: grid; grid-template-columns: 340px 1fr; gap: 16px; align-items: start; }
+.demand-list { max-height: 70vh; overflow: auto; }
+.demand-item { padding: 8px 10px; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 8px; border: 1px solid transparent; }
+.demand-item:hover { background: #f4f7fb; }
+.demand-item.selected { background: #fff3e0; border-color: var(--orange); }
+.demand-item .name { font-size: 13px; }
+.demand-item .left { font-weight: 700; color: var(--navy); font-size: 13px; white-space: nowrap; }
+.plan-grid { overflow: auto; }
+.plan-grid table { min-width: 900px; }
+.plan-grid td.cell { min-width: 110px; height: 56px; border: 1px solid #e3e8f0; cursor: pointer; vertical-align: top; padding: 4px 6px; }
+.plan-grid td.cell.hint { background: #f3f8ff; }
+.plan-grid td.cell:hover { background: #fff8ef; }
+.plan-grid td.machine { font-weight: 700; color: var(--navy); white-space: nowrap; }
+.plan-grid .dept-row td { background: #eef2f7; color: var(--gray); font-size: 12px; font-weight: 700; }
+.entry { display: flex; justify-content: space-between; gap: 6px; font-size: 12px; padding: 2px 0; }
+.entry .x { color: var(--red); cursor: pointer; font-weight: 700; }
+.modal-bg { position: fixed; inset: 0; background: rgba(31,42,60,.45); display: flex; align-items: center; justify-content: center; z-index: 50; }
+.modal { background: var(--white); border-radius: 12px; padding: 20px 22px; width: 420px; }
+.modal h3 { margin: 0 0 12px; color: var(--navy); }
+.modal select, .modal textarea { width: 100%; padding: 8px; border: 1px solid #d5dbe5; border-radius: 8px; font-family: inherit; font-size: 14px; margin-bottom: 10px; }
+.modal .actions { display: flex; justify-content: flex-end; gap: 8px; }
+.footer { color: var(--gray); font-size: 12px; margin-top: 24px; }
+@media (max-width: 900px) { .grid.cols-4 { grid-template-columns: 1fr 1fr; } .grid.cols-2 { grid-template-columns: 1fr; } .plan-layout { grid-template-columns: 1fr; } }
