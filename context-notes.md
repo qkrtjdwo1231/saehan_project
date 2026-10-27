@@ -108,6 +108,11 @@
 - 실험 1 결과(`reports/06_experiments.md`): 최적 ses α0.3×계절×연휴, 계수 추정 2021~2023(A 4주합 0.554). 업계 지수 w는 효과 없음(짝 비교 0.554→0.556). produce.py TRAIN_YEARS를 2021~2023으로 변경 → 총량 예측 주당 2.51백만.
 - 참고 서비스 반영: 계획 격자는 Odoo MPS(품목×기간 격자), B유형 담당자 입력 우선은 Katana, 재고 소진일 색 표시는 Streamline에서 빌림. 변경 이력 화면은 우리 고유.
 
+### 버셀 배포 성공 (2026-10-27 22:06)
+- 루트 `vercel.json`(installCommand/buildCommand/outputDirectory=web/out, framework null) + Next `output: "export"`, `trailingSlash: true`로 Root Directory 설정 없이 배포. https://saehanproject.vercel.app 화면 5개 모두 200.
+- 첫 배포는 상단에 "로컬 데이터" 표시 → 빌드 시점에 NEXT_PUBLIC_SUPABASE_* 환경변수가 없었음. 환경변수 확인 후 재배포(푸시) 필요. 정적 내보내기라 환경변수는 빌드 때 박힌다.
+- 수파베이스 표 5개 아직 없음(사용자 SQL 실행 대기). 표 생성 후 `python pipeline/upload_supabase.py data/web` 실행.
+
 ### 결정사항과 이유
 - 사용자 결정: 1순위 과제는 **출하예측 기반 생산계획 수립**. 적재 계산기·원자재 발주 시스템은 여기서 파생되는 부속 기능으로 본다.
 - 사용자 요구: 출하예측에 다른 변수도 반영, 계획 변경 이력·사유 관리가 쉬울 것, 실시간 가용재고 보드를 보기 편한 웹으로.
